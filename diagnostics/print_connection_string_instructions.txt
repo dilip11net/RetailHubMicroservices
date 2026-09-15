@@ -1,0 +1,46 @@
+Add temporary logging to print the active Marten/Npgsql connection string when a session is created or before it opens. Example code snippets:
+
+1) If you have an IDocumentSession available in a handler (C#):
+
+```csharp
+// using Microsoft.Extensions.Logging;
+// inject ILogger<GetProductQueryHandler> logger and IDocumentSession session
+logger.LogInformation("Marten connection: {Connection}", session?.Database?.Connection?.ConnectionString ?? "(null)");
+```
+
+2) If using IConfiguration where connection is registered (Program.cs / Startup):
+
+```csharp
+var cs = configuration.GetConnectionString("DefaultConnection") ?? configuration["ConnectionStrings:DefaultConnection"];
+logger.LogInformation("Configured connection string: {cs}", cs);
+```
+
+3) If Marten was configured with a connection string in options:
+
+```csharp
+services.AddMarten(opts =>
+{
+	var cs = configuration.GetConnectionString("DefaultConnection");
+	logger.LogInformation("Marten config connection string: {cs}", cs);
+	opts.Connection(cs);
+	// ...
+});
+```
+
+Notes and safety:
+- Do not log this in production; it contains credentials. Run locally or redact before logging (log only host/user/db but NOT password).
+- If you cannot change code, inspect appsettings.json, environment variables, or your secret store where connection string is kept.
+
+After you retrieve the connection string, verify it with psql (example):
+
+psql "host=HOST dbname=DB user=postgres password=THEPASSWORD" -c "select 1;"
+
+If psql returns authentication error, the credentials are wrong or pg_hba.conf blocks the connection.
+
+If you want, I can now:
+- provide the exact code snippet tailored to your project files,
+- read your appsettings.json from the repo to find the configured connection string,
+- give the psql command for testing with placeholders,
+- explain how to safely reset the postgres password.
+
+Choose one of those actions and I will proceed.
