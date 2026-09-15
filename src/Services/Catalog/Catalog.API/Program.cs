@@ -1,5 +1,3 @@
-using BuildingBlocks.Behaviors;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +14,10 @@ builder.Services.AddMarten(opts => {
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
 
 }).UseLightweightSessions();
+if(builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+};
 
 var app = builder.Build();
 
