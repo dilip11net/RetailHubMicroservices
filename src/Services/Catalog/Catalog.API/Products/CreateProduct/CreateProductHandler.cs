@@ -37,7 +37,7 @@ namespace Catalog.API.Products.CreateProduct
     }
 
 
-    internal class CreateProductCommandHandler(IDocumentSession session, ILogger<CreateProductCommandHandler> logger) : ICommandHandler<CreateProductCommand, CreateProductResult>
+    internal class CreateProductCommandHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
@@ -53,7 +53,12 @@ namespace Catalog.API.Products.CreateProduct
             //{
             //    throw new ValidationException(string.Join(";",error));
             //}
-            logger.LogInformation("Creating a new product with name: {ProductName}", command.Name);
+
+
+            //logger.LogInformation("Creating a new product with name: {ProductName}", command.Name);
+            //Logger is moved to the pipeline, so we don't need to log here anymore.
+
+
             var product = new Models.Product
             {
                 Id = Guid.NewGuid(),
