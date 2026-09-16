@@ -10,3 +10,5 @@ global using BuildingBlocks.Behaviors;
 global using Catalog.API.Data;
 global using Microsoft.AspNetCore.Mvc;
 global using Marten.Pagination;
+global using BuildingBlocks.Exceptions.Handler;
+global using HealthChecks.UI.Client;
