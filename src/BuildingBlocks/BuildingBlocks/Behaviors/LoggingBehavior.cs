@@ -27,7 +27,7 @@ namespace BuildingBlocks.Behaviors
             if(timeTaken.Seconds > 3)
               logger.LogWarning("[SLOW-PERFORMANCE] Handling request: {Request} - Response: {Response} - TimeTaken: {TimeTaken}sec",typeof(TRequest).Name, typeof(TResponse).Name, timeTaken);
             
-            logger.LogInformation("[END] Handling request: {Request} - Response: {Response} - ResponseData: {ResponseData}",
+            logger.LogInformation("[END] Handling request: {Request} - Response: {Response} - ResponseData: {ResponseData}", 
                 typeof(TRequest).Name, typeof(TResponse).Name, response);
 
             return response;
