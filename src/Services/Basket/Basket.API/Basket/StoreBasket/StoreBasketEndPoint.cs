@@ -1,8 +1,4 @@
-﻿
-
-using System.Reflection.Metadata;
-
-namespace Basket.API.Basket.StoreBasket
+﻿namespace Basket.API.Basket.StoreBasket
 {
     public record StoreBasketRequest(Cart Cart);
     public record StoreBasketResponse(Guid Success);
@@ -22,7 +18,7 @@ namespace Basket.API.Basket.StoreBasket
 
             })
                 .WithName("StoreBasket")
-                .Produces<StoreBasketResponse>(StatusCodes.Status200OK)
+                .Produces<StoreBasketResponse>(StatusCodes.Status201Created)
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .ProducesProblem(StatusCodes.Status500InternalServerError)
                 .WithDescription("Store a basket for a user")

@@ -11,15 +11,24 @@
             RuleFor(x => x.Cart).NotNull().WithMessage("Cart is required.");
         }
     }
-    public class StoreBasketCommandHandler(IBasketRepository basketRepository) : ICommandHandler<StoreBasketCommand, StoreBasketResult>
+    public class StoreBasketCommandHandler(IBasketRepository basketRepository, DiscountProtoService.DiscountProtoServiceClient discountProtoService) : ICommandHandler<StoreBasketCommand, StoreBasketResult>
     {
         public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
         {
-            Cart cart = command.Cart;
+            await DeductDiscount(command.Cart, cancellationToken);
 
-            await basketRepository.StoreBasketAsync(command.Cart,cancellationToken);
+            await basketRepository.StoreBasketAsync(command.Cart, cancellationToken);
 
             return new StoreBasketResult(command.Cart.UserId);
+        }
+    
+    private async Task DeductDiscount(Cart cart, CancellationToken cancellationToken)
+        {
+            foreach(var item in cart.Items)
+            {
+                var coupon = await discountProtoService.GetDiscountAsync(new GetDiscountRequest { ProductName = item.ProductName }, cancellationToken: cancellationToken);
+                item.Price -= coupon.Amount;
+            }
         }
     }
 }
