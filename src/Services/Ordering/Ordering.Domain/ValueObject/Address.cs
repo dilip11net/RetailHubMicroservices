@@ -14,7 +14,7 @@ namespace Ordering.Domain.ValueObject
         public string ZipCode { get; init; } = default!;
         public string Country { get; init; } = default!;
 
-        protected Address(string firstName, string lastName, string email, string street, string city, string state, string zipCode, string country)
+        private Address(string firstName, string lastName, string email, string street, string city, string state, string zipCode, string country)
         {
             FirstName = firstName;
                 LastName = lastName;

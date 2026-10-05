@@ -7,15 +7,17 @@
 
         public string Description { get; private set; } = default!;
 
-        public static Product Create(ProductId id, string name, decimal price)
+        public static Product Create(ProductId id, string name, decimal price, string description)
         {
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price, nameof(price));
+            ArgumentException.ThrowIfNullOrEmpty(description, nameof(description));
             return new Product
             {
                 Id = id,
                 Name = name,
-                Price = price
+                Price = price,
+                Description = string.Empty
             };
         }
     }

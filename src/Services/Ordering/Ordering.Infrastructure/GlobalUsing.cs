@@ -2,4 +2,8 @@
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
-
+global using Ordering.Domain.Models;
+global using Ordering.Domain.ValueObject;
+global using Microsoft.EntityFrameworkCore.ChangeTracking;
+global using Microsoft.EntityFrameworkCore.Diagnostics;
+global using Ordering.Domain.Abstractions;
