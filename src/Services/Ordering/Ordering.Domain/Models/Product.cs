@@ -5,6 +5,8 @@
         public string Name { get; private set; } = default!;
         public decimal Price { get; private set; } = default!;
 
+        public string Description { get; private set; } = default!;
+
         public static Product Create(ProductId id, string name, decimal price)
         {
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
