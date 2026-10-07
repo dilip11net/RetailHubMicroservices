@@ -1,4 +1,5 @@
-﻿using Ordering.Infrastructure.Data.Interceptors;
+﻿using Ordering.Application.Data;
+using Ordering.Infrastructure.Data.Interceptors;
 
 namespace Ordering.Infrastructure
 {
@@ -23,7 +24,7 @@ namespace Ordering.Infrastructure
 
 
             });
-           // services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+           services.AddScoped<IApplicationDBContext, ApplicationDbContext>();
 
 
 

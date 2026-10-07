@@ -47,7 +47,7 @@ namespace Ordering.Domain.Models
             return order;
         }
 
-        public void Update(OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment)
+        public void Update(OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment, OrderStatus status)
         {
             //ArgumentNullException.ThrowIfNull(orderName, nameof(orderName));
             //ArgumentNullException.ThrowIfNull(shippingAddress, nameof(shippingAddress));
@@ -57,6 +57,7 @@ namespace Ordering.Domain.Models
             ShippingAddress = shippingAddress;
             BillingAddress = billingAddress;
             Payment = payment;
+            Status = status;
             AddDomainEvent(new OrderUpdatedEvent(this));
         }
 
