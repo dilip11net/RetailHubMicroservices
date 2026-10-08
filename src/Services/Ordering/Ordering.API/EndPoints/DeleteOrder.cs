@@ -2,7 +2,7 @@
 
 namespace Ordering.API.EndPoints
 {
-    public record DeleteOrderResponse(bool Success);
+    public record DeleteOrderResponse(bool IsSuccess);
     public class DeleteOrder : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)

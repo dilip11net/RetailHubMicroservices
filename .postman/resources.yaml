@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: 31a18a36-dc62-4768-86b5-cfb51b97d9be
+
+localResources:
+  specs:
+    - ../src/Services/Discount/Discount.Grpc/Protos/discount.proto

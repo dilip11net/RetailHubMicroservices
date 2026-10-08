@@ -3,7 +3,7 @@
 namespace Ordering.API.EndPoints
 {
     public record CreateOrderRequest(OrderDto Order);
-    public record CreateOrderResponse(Guid OrderId);
+    public record CreateOrderResponse(Guid Id);
     public class CreateOrder : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
@@ -15,7 +15,7 @@ namespace Ordering.API.EndPoints
                 var command = request.Adapt<CreateOrderCommand>();
                 var result = await sender.Send(command);
                 var response = result.Adapt<CreateOrderResponse>();
-                return Results.Created($"/orders/{response.OrderId}", response);
+                return Results.Created($"/orders/{response.Id}", response);
             })
                 .WithName("CreateOrder")
                 .Produces<CreateOrderResponse>(StatusCodes.Status201Created)
