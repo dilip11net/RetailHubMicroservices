@@ -1,6 +1,12 @@
+using BuildingBlocks.Messaging.MassTransit;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 //Add services to the container.
 
+//Application Services
+var assembly = typeof(Program).Assembly;
 builder.Services.AddCarter();
 builder.Services.AddMediatR(cfg =>
 {
@@ -9,6 +15,8 @@ builder.Services.AddMediatR(cfg =>
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
+
+//Data Service
 builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
@@ -34,8 +42,6 @@ builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 //OR USE -- Scrutor Decorator Pattern
 builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 
-builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-
 //Redis 
 builder.Services.AddStackExchangeRedisCache(opt =>
 {
@@ -43,6 +49,9 @@ builder.Services.AddStackExchangeRedisCache(opt =>
 });
 
 
+
+
+//Grpc Services
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opt =>
 {
     opt.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
@@ -56,7 +65,12 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
     return handler;
 });
 
+//Async Messaging with RabbitMQ
+builder.Services.AddMessageBroker(builder.Configuration);
 
+
+//Cross-cutting Services
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)

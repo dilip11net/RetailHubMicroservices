@@ -10,3 +10,4 @@ global using BuildingBlocks.Exceptions.Handler;
 global using Marten;
 global using HealthChecks.UI.Client;
 global using Discount.Grpc;
+global using Basket.API.DTOs;
