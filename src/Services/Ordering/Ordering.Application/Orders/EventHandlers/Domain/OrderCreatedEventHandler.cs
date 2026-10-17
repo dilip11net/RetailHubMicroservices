@@ -1,6 +1,9 @@
-﻿namespace Ordering.Application.Orders.EventHandlers.Domain
+﻿using Microsoft.FeatureManagement;
+using Ordering.Application.Extensions;
+
+namespace Ordering.Application.Orders.EventHandlers.Domain
 {
-    public class OrderCreatedEventHandler(ILogger<OrderCreatedEventHandler> logger, IPublishEndpoint publishEndpoint) 
+    public class OrderCreatedEventHandler(ILogger<OrderCreatedEventHandler> logger, IPublishEndpoint publishEndpoint, IFeatureManager featureManager) 
         : INotificationHandler<OrderCreatedEvent>
     {
         public async Task Handle(OrderCreatedEvent domainEvent, CancellationToken cancellationToken)
@@ -9,9 +12,15 @@
             // For example, you can log the event or perform additional actions
             logger.LogInformation("Domain Event handled: {DomainEvent}", domainEvent.GetType().Name);
 
-            var orderCreatedIntegrationEvent = domainEvent.Order.ToOrderDto();
+            if(await featureManager.IsEnabledAsync("OrderFullfilment"))
+            {
+                logger.LogInformation("Feature 'OrderFullfilment' is enabled. Publishing integration event.");
 
-            await publishEndpoint.Publish(orderCreatedIntegrationEvent, cancellationToken);
+                var orderCreatedIntegrationEvent = domainEvent.Order.ToOrderDto();
+
+                await publishEndpoint.Publish(orderCreatedIntegrationEvent, cancellationToken);
+            }
+            
         }
     }
 }
