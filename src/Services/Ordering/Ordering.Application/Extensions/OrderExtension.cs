@@ -6,10 +6,10 @@
         {
             return orders.Select(order => new OrderDto
             (
-                Id : order.Id.Value,
-                CustomerId : order.CustomerId.Value,
-                OrderName : order.OrderName.Value,
-                ShippingAddress : new AddressDto
+                Id: order.Id.Value,
+                CustomerId: order.CustomerId.Value,
+                OrderName: order.OrderName.Value,
+                ShippingAddress: new AddressDto
                     (
                         order.ShippingAddress.FirstName,
                             order.ShippingAddress.LastName,
@@ -21,7 +21,7 @@
                          order.ShippingAddress.ZipCode,
                             order.ShippingAddress.Country
                     ),
-                BillingAddress : new AddressDto
+                BillingAddress: new AddressDto
                     (
                         order.BillingAddress.FirstName,
                         order.BillingAddress.LastName,
@@ -32,7 +32,7 @@
                          order.BillingAddress.ZipCode,
                          order.BillingAddress.Country
                     ),
-                Payment : new PaymentDto
+                Payment: new PaymentDto
                     (
                          order.Payment.CardName,
                          order.Payment.CardNumber,
@@ -41,8 +41,8 @@
                          order.Payment.PaymentMethod
 
                     ),
-                Status : order.Status,
-                OrderItems : order.OrderItems.Select(oi => new OrderItemDto
+                Status: order.Status,
+                OrderItems: order.OrderItems.Select(oi => new OrderItemDto
                 (
                     oi.OrderId.Value,
                     oi.ProductId.Value,
@@ -51,6 +51,60 @@
 
                 )).ToList()
             ));
+        }
+
+        public static OrderDto ToOrderDto(this Order order)
+        {
+
+            return DtoFromOrder(order);
+        }
+
+        private static OrderDto DtoFromOrder(Order order)
+        {
+            return new OrderDto
+            (
+                Id: order.Id.Value,
+                CustomerId: order.CustomerId.Value,
+                OrderName: order.OrderName.Value,
+                ShippingAddress: new AddressDto
+                    (
+                        order.ShippingAddress.FirstName,
+                            order.ShippingAddress.LastName,
+                             order.ShippingAddress.Email,
+                         order.ShippingAddress.Street,
+                         order.ShippingAddress.City,
+                         order.ShippingAddress.State,
+                         order.ShippingAddress.ZipCode,
+                            order.ShippingAddress.Country
+                    ),
+                BillingAddress: new AddressDto
+                    (
+                        order.BillingAddress.FirstName,
+                        order.BillingAddress.LastName,
+                        order.BillingAddress.Email,
+                         order.BillingAddress.Street,
+                         order.BillingAddress.City,
+                         order.BillingAddress.State,
+                         order.BillingAddress.ZipCode,
+                         order.BillingAddress.Country
+                    ),
+                Payment: new PaymentDto
+                    (
+                         order.Payment.CardName,
+                         order.Payment.CardNumber,
+                         order.Payment.Expiration,
+                         order.Payment.CVV,
+                         order.Payment.PaymentMethod
+                    ),
+                Status: order.Status,
+                OrderItems: order.OrderItems.Select(oi => new OrderItemDto
+                (
+                    oi.OrderId.Value,
+                    oi.ProductId.Value,
+                     oi.UnitPrice,
+                    oi.Quantity
+                )).ToList()
+            );
         }
     }
 }

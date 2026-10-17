@@ -13,9 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 // API - Carter, Swagger, HealthChecks
 
 
-builder.Services.AddApplicationServices()
+builder.Services.AddApplicationServices(builder.Configuration)
     .AddInfrastructure(builder.Configuration)
     .AddWebApiServices(builder.Configuration);
+
 
 
 var app = builder.Build();
