@@ -10,20 +10,30 @@ namespace BuildingBlocks.Messaging.MassTransit
 {
     public static class Extentions
     {
-        public static IServiceCollection AddMessageBroker(this IServiceCollection services,IConfiguration configuration, Assembly? assembly = null)
+        public static IServiceCollection AddMessageBroker(
+    this IServiceCollection services,
+    IConfiguration configuration,
+    Assembly? assembly = null)
         {
-            
+            //var host = configuration["MessageBroker:Host"]
+            //    ?? throw new InvalidOperationException(
+            //        "MessageBroker:Host is missing.");
+
+            //var username = configuration["MessageBroker:UserName"]
+            //    ?? throw new InvalidOperationException(
+            //        "MessageBroker:UserName is missing.");
+
+            //var password = configuration["MessageBroker:Password"]
+            //    ?? throw new InvalidOperationException(
+            //        "MessageBroker:Password is missing.");
+
             services.AddMassTransit(config =>
             {
                 config.SetKebabCaseEndpointNameFormatter();
 
-                if(assembly != null)
+                if (assembly != null)
                 {
                     config.AddConsumers(assembly);
-                }
-                else
-                {
-                  //  config.AddConsumers(Assembly.GetExecutingAssembly());
                 }
 
                 config.UsingRabbitMq((context, cfg) =>
@@ -33,13 +43,13 @@ namespace BuildingBlocks.Messaging.MassTransit
                         h.Username(configuration["MessageBroker:UserName"]!);
                         h.Password(configuration["MessageBroker:Password"]!);
                     });
+
                     cfg.ConfigureEndpoints(context);
                 });
-
-
             });
+
             return services;
         }
-        
+
     }
 }
