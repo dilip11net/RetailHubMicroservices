@@ -41,9 +41,16 @@ services:
     depends_on:
       - messagebroker
 
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+
 volumes:
   postgres_catalog:
   postgres_basket:
     
+
 
 
