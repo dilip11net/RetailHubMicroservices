@@ -3,11 +3,51 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Shopping.Web.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel(ICatalogService catalogService,IBasketService basketService, ILogger<IndexModel> logger) : PageModel
     {
-        public void OnGet()
+        //private readonly ILogger<IndexModel> _logger;
+        //private readonly ICatalogService _catalogService;
+        public IEnumerable<ProductModel> ProductList { get; set; } = new List<ProductModel>();
+
+        //public IndexModel(ICatalogService catalogService, ILogger<IndexModel> logger)
+        //{
+        //    _catalogService = catalogService;
+        //    _logger = logger;
+        //}
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            logger.LogInformation("Index page visited at {DT}", DateTime.UtcNow.ToLongTimeString());
+            var result = await catalogService.GetProducts();
+            ProductList = result.Products;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
         {
 
+            logger.LogInformation("Add to cart for product {ProductId} at {DT}", productId, DateTime.UtcNow.ToLongTimeString());
+
+            var productResponse = await catalogService.GetProduct(productId);
+            //var product = productResponse.Product;
+            //if (product == null)
+            //{
+            //    return NotFound();
+            //}
+            var basket = await basketService.LoadUserBasket();
+            basket.Items.Add(new ShoppingCartItemModel
+            {
+                ProductId = productId,
+                ProductName = productResponse.Product.Name,
+                Price = productResponse.Product.Price,
+                Quantity = 1,
+                Color = "Black"
+
+            });
+            await basketService.StoreBasket(new StoreBasketRequest(basket));
+            return RedirectToPage("Cart");
         }
+
+        
     }
 }

@@ -2,7 +2,7 @@
 {
     public class ShoppingCartModel
     {
-        public string UserName { get; set; } = default!;
+        public Guid UserId { get; set; } = default!;
 
         public List<ShoppingCartItemModel> Items { get; set; } = new();
 
